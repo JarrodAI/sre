@@ -2,10 +2,10 @@
 
 import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
-import Header from '@/components/Header';
+import Header from '../components/Header';
 
 // Dynamically import the 3D scene component with SSR disabled
-const Scene3D = dynamic(() => import('@/components/Scene3D'), {
+const Scene3D = dynamic(() => import('../components/Scene3D'), {
   ssr: false,
   loading: () => <div className="w-full h-[500px] bg-blue-100 flex items-center justify-center">Loading 3D Scene...</div>
 });

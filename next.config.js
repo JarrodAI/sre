@@ -5,14 +5,10 @@ const nextConfig = {
     // Support for video files
     config.module.rules.push({
       test: /\.(mp4|webm)$/,
-      use: {
-        loader: "file-loader",
-        options: {
-          publicPath: "/_next/static/videos/",
-          outputPath: "static/videos/",
-          name: "[name].[hash].[ext]",
-        },
-      },
+      type: 'asset/resource',
+      generator: {
+        filename: 'static/videos/[name].[hash][ext]'
+      }
     });
 
     return config;

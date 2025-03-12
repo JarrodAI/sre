@@ -1,14 +1,30 @@
 "use client";
 
-import dynamic from 'next/dynamic';
-import { Suspense } from 'react';
 import Header from '../components/Header';
 
-// Dynamically import the 3D scene component with SSR disabled
-const Scene3D = dynamic(() => import('../components/Scene3D'), {
-  ssr: false,
-  loading: () => <div className="w-full h-[500px] bg-blue-100 flex items-center justify-center">Loading 3D Scene...</div>
-});
+// Placeholder for 3D scene
+const Scene3DPlaceholder = () => (
+  <div className="w-full h-[500px] bg-blue-100 flex items-center justify-center">
+    <div className="text-center">
+      <svg 
+        xmlns="http://www.w3.org/2000/svg" 
+        width="64" 
+        height="64" 
+        viewBox="0 0 24 24" 
+        fill="none" 
+        stroke="currentColor" 
+        strokeWidth="2" 
+        strokeLinecap="round" 
+        strokeLinejoin="round" 
+        className="mx-auto mb-4 text-green-700"
+      >
+        <circle cx="12" cy="12" r="10"></circle>
+        <polygon points="10 8 16 12 10 16 10 8"></polygon>
+      </svg>
+      <p className="text-lg text-green-700 font-medium">3D Visualization</p>
+    </div>
+  </div>
+);
 
 // Services section component
 const Services = () => {
@@ -60,9 +76,7 @@ const About = () => {
             </p>
           </div>
           <div className="md:w-1/2 md:pl-12">
-            <Suspense fallback={<div>Loading 3D visualization...</div>}>
-              <Scene3D />
-            </Suspense>
+            <Scene3DPlaceholder />
           </div>
         </div>
       </div>

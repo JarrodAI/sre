@@ -1,0 +1,7 @@
+This is a placeholder for the header background video.
+
+Please replace this with an actual MP4 video file named "header-bg.mp4" in this directory.
+
+For testing purposes, you can download a free stock video that fits the theme of an SEO company (like a cityscape, data visualization, or business meeting) from sites like Pexels or Pixabay.
+
+Once you have the video, rename it to "header-bg.mp4" and place it in this directory (public/videos/).

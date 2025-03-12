@@ -2,7 +2,6 @@ import { useRef, useState } from 'react';
 import * as THREE from 'three';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Sphere, MeshDistortMaterial } from '@react-three/drei';
-import { useSpring, animated } from '@react-spring/three';
 
 // Animated 3D sphere component
 const AnimatedSphere = ({ position, color, speed, distort }: { 
@@ -13,28 +12,32 @@ const AnimatedSphere = ({ position, color, speed, distort }: {
 }) => {
   const meshRef = useRef<THREE.Mesh>(null);
   const [hovered, setHovered] = useState(false);
+  const [scale, setScale] = useState(1);
   
-  // Animation with useSpring
-  const { scale } = useSpring({
-    scale: hovered ? 1.2 : 1,
-    config: { tension: 300, friction: 10 }
-  });
+  // Handle hover effect
+  const handlePointerOver = () => setHovered(true);
+  const handlePointerOut = () => setHovered(false);
   
-  // Rotation animation
+  // Animation frame
   useFrame((state) => {
     if (meshRef.current) {
+      // Rotation animation
       meshRef.current.rotation.x = state.clock.getElapsedTime() * speed * 0.2;
       meshRef.current.rotation.y = state.clock.getElapsedTime() * speed * 0.3;
+      
+      // Scale animation
+      const targetScale = hovered ? 1.2 : 1;
+      setScale(THREE.MathUtils.lerp(scale, targetScale, 0.1));
     }
   });
   
   return (
-    <animated.mesh
+    <mesh
       ref={meshRef}
       position={position}
       scale={scale}
-      onPointerOver={() => setHovered(true)}
-      onPointerOut={() => setHovered(false)}
+      onPointerOver={handlePointerOver}
+      onPointerOut={handlePointerOut}
     >
       <Sphere args={[1, 64, 64]}>
         <MeshDistortMaterial 
@@ -46,7 +49,7 @@ const AnimatedSphere = ({ position, color, speed, distort }: {
           metalness={0.8}
         />
       </Sphere>
-    </animated.mesh>
+    </mesh>
   );
 };
 

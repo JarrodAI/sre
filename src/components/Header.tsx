@@ -47,6 +47,7 @@ const Header = () => {
           autoPlay 
           muted 
           loop 
+          playsInline
           width="1920"
           height="1080"
           className="object-cover w-full h-full"

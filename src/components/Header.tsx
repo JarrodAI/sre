@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import Link from 'next/link';
 import VideoFallback from './VideoFallback';
@@ -6,10 +6,35 @@ import VideoFallback from './VideoFallback';
 const Header = () => {
   const { scrollY } = useScroll();
   const headerRef = useRef<HTMLDivElement>(null);
+  const [scrollPosition, setScrollPosition] = useState(0);
   
   // Transform values based on scroll
   const headerBgOpacity = useTransform(scrollY, [0, 200], [0.1, 1]);
   const videoScale = useTransform(scrollY, [0, 200], [1, 1.1]);
+  
+  // Update scroll position state
+  useEffect(() => {
+    const updateScrollPosition = () => {
+      setScrollPosition(window.scrollY);
+    };
+    
+    window.addEventListener('scroll', updateScrollPosition);
+    updateScrollPosition(); // Initialize on mount
+    
+    return () => window.removeEventListener('scroll', updateScrollPosition);
+  }, []);
+  
+  // Determine colors based on scroll position
+  const isScrolled = scrollPosition > 100;
+  const textColor = 'white';
+  const buttonBgColor = 'var(--header-bg)';
+  const buttonTextColor = 'white';
+  
+  // Text shadow for better visibility when not scrolled
+  const textShadow = isScrolled ? 'none' : '0 1px 3px rgba(0, 0, 0, 0.5)';
+  
+  // Make header completely transparent when not scrolled
+  const headerInitialBg = isScrolled ? 'transparent' : 'transparent';
 
   return (
     <div className="relative w-full h-screen overflow-hidden" ref={headerRef}>
@@ -22,6 +47,8 @@ const Header = () => {
           autoPlay 
           muted 
           loop 
+          width="1920"
+          height="1080"
           className="object-cover w-full h-full"
           onError={(e) => {
             // Hide the video element if there's an error loading the video
@@ -45,40 +72,58 @@ const Header = () => {
       <motion.div 
         className="fixed top-0 left-0 w-full z-20"
         style={{ 
-          backgroundColor: '#2c8769',
-          opacity: headerBgOpacity 
+          backgroundColor: isScrolled ? 'var(--header-bg)' : headerInitialBg,
+          opacity: isScrolled ? headerBgOpacity : 1
         }}
       >
         <div className="container mx-auto px-4 py-6 flex justify-between items-center">
           {/* Logo */}
           <div className="flex items-center">
-            <svg width="200" height="40" viewBox="0 0 200 40" className="text-white">
-              <text x="0" y="25" fontFamily="Barlow" fontSize="20" fontWeight="600" fill="currentColor">
-                SearchRankExperts.com
-              </text>
-              <g transform="translate(170, 10)">
-                <rect x="0" y="0" width="4" height="20" fill="currentColor" />
-                <rect x="8" y="5" width="4" height="15" fill="currentColor" />
-                <rect x="16" y="10" width="4" height="10" fill="currentColor" />
-              </g>
-            </svg>
+            <motion.img 
+              src="https://www.searchrankexperts.com/logo.svg" 
+              alt="SearchRankExperts.com Logo"
+              width="386"
+              height="124"
+              style={{
+                filter: isScrolled ? 'brightness(1)' : 'drop-shadow(0 1px 3px rgba(0, 0, 0, 0.5))'
+              }}
+            />
           </div>
           
-          {/* Navigation */}
-          <nav className="hidden md:flex items-center space-x-1">
-            <Link href="#services" className="nav-link">Services</Link>
-            <Link href="#work" className="nav-link">Work</Link>
-            <Link href="#clients" className="nav-link">Clients</Link>
-            <Link href="#knowledge" className="nav-link">Knowledge</Link>
-            <Link href="#about" className="nav-link">About</Link>
-            <Link href="#blog" className="nav-link">Blog</Link>
-            <Link href="#careers" className="nav-link">Careers</Link>
-          </nav>
-          
-          {/* Contact Button */}
-          <Link href="#contact" className="contact-btn">
-            Contact
-          </Link>
+          {/* Navigation and Contact Button Container */}
+          <div className="hidden md:flex items-center justify-center flex-1">
+            <motion.nav 
+              className="flex items-center space-x-1 opacity-100 justify-center"
+              style={{
+                color: textColor,
+                textShadow: textShadow
+              }}
+            >
+              <Link href="#services" className="nav-link" style={{color: 'inherit'}}>Services</Link>
+              <Link href="#work" className="nav-link" style={{color: 'inherit'}}>Work</Link>
+              <Link href="#clients" className="nav-link" style={{color: 'inherit'}}>Clients</Link>
+              <Link href="#knowledge" className="nav-link" style={{color: 'inherit'}}>Knowledge</Link>
+              <Link href="#about" className="nav-link" style={{color: 'inherit'}}>About</Link>
+              <Link href="#blog" className="nav-link" style={{color: 'inherit'}}>Blog</Link>
+            </motion.nav>
+            
+            {/* Contact Button */}
+            <motion.div
+              className="ml-24" /* 96px (1 inch) = 24 in Tailwind (24 * 4 = 96) */
+              style={{
+                backgroundColor: buttonBgColor,
+                color: buttonTextColor
+              }}
+            >
+              <Link href="#contact" className="contact-btn" style={{
+                backgroundColor: 'inherit',
+                color: 'inherit',
+                display: 'inline-block'
+              }}>
+                Contact
+              </Link>
+            </motion.div>
+          </div>
         </div>
       </motion.div>
       

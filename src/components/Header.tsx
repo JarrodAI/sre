@@ -44,13 +44,17 @@ const Header = () => {
         style={{ scale: videoScale }}
       >
         <video 
-          autoPlay 
-          muted 
-          loop 
-          playsInline
+          id="desktopOnly"
+          className="desktopOnly object-cover w-full h-full"
+          {...{
+            playsinline: "playsinline",
+            autoplay: "autoplay",
+            muted: "muted",
+            loop: "loop"
+          } as any}
           width="1920"
           height="1080"
-          className="object-cover w-full h-full"
+          poster="/test.jpg"
           onError={(e) => {
             // Hide the video element if there's an error loading the video
             const target = e.target as HTMLVideoElement;

@@ -87,8 +87,8 @@ const Header = () => {
             <motion.img 
               src="https://www.searchrankexperts.com/logo.svg" 
               alt="SearchRankExperts.com Logo"
-              width="386"
-              height="124"
+              width="179"
+              height="60"
               style={{
                 filter: isScrolled ? 'brightness(1)' : 'drop-shadow(0 1px 3px rgba(0, 0, 0, 0.5))'
               }}

@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, Fragment } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import Link from 'next/link';
 import VideoFallback from './VideoFallback';
@@ -7,6 +7,7 @@ const Header = () => {
   const { scrollY } = useScroll();
   const headerRef = useRef<HTMLDivElement>(null);
   const [scrollPosition, setScrollPosition] = useState(0);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   
   // Transform values based on scroll
   const headerBgOpacity = useTransform(scrollY, [0, 200], [0.1, 1]);
@@ -95,7 +96,7 @@ const Header = () => {
             />
           </div>
           
-          {/* Navigation and Contact Button Container */}
+          {/* Desktop Navigation and Contact Button */}
           <div className="hidden md:flex items-center justify-center flex-1">
             <motion.nav 
               className="flex items-center space-x-1 opacity-100 justify-center"
@@ -112,7 +113,7 @@ const Header = () => {
               <Link href="#blog" className="nav-link" style={{color: 'inherit'}}>Blog</Link>
             </motion.nav>
             
-            {/* Contact Button */}
+            {/* Desktop Contact Button */}
             <motion.div
               className="ml-24" /* 96px (1 inch) = 24 in Tailwind (24 * 4 = 96) */
               style={{
@@ -129,6 +130,58 @@ const Header = () => {
               </Link>
             </motion.div>
           </div>
+
+          {/* Mobile Navigation */}
+          <div className="flex md:hidden items-center space-x-4">
+            {/* Mobile Contact Button */}
+            <Link 
+              href="#contact" 
+              className="px-4 py-2 rounded"
+              style={{
+                backgroundColor: buttonBgColor,
+                color: buttonTextColor
+              }}
+            >
+              Contact
+            </Link>
+
+            {/* Hamburger Menu Button */}
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="text-white p-2"
+              aria-label="Menu"
+            >
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                {isMobileMenuOpen ? (
+                  <path d="M6 18L18 6M6 6l12 12" />
+                ) : (
+                  <path d="M4 6h16M4 12h16M4 18h16" />
+                )}
+              </svg>
+            </button>
+          </div>
+
+          {/* Mobile Menu Dropdown */}
+          {isMobileMenuOpen && (
+            <div className="absolute top-full left-0 right-0 bg-black/90 md:hidden">
+              <nav className="flex flex-col items-center py-4">
+                <Link href="#services" className="w-full text-center text-white py-3 hover:bg-white/10" onClick={() => setIsMobileMenuOpen(false)}>Services</Link>
+                <Link href="#work" className="w-full text-center text-white py-3 hover:bg-white/10" onClick={() => setIsMobileMenuOpen(false)}>Work</Link>
+                <Link href="#clients" className="w-full text-center text-white py-3 hover:bg-white/10" onClick={() => setIsMobileMenuOpen(false)}>Clients</Link>
+                <Link href="#knowledge" className="w-full text-center text-white py-3 hover:bg-white/10" onClick={() => setIsMobileMenuOpen(false)}>Knowledge</Link>
+                <Link href="#about" className="w-full text-center text-white py-3 hover:bg-white/10" onClick={() => setIsMobileMenuOpen(false)}>About</Link>
+                <Link href="#blog" className="w-full text-center text-white py-3 hover:bg-white/10" onClick={() => setIsMobileMenuOpen(false)}>Blog</Link>
+              </nav>
+            </div>
+          )}
         </div>
       </motion.div>
       
